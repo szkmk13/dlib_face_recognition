@@ -12,4 +12,4 @@ python3 -m ensurepip --upgrade
 
 echo "installing requirements"
 pip3 install -r requirements.txt
-python3 main.py
+#python3 main.py

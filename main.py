@@ -4,18 +4,13 @@ import tempfile
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, File, UploadFile, HTTPException, Depends
 from fastapi.responses import JSONResponse
-import cv2
-import dlib
-import numpy as np
 
 app = FastAPI()
 load_dotenv()
 
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-recognizer = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
-
 API_KEY = os.getenv("METAMIEJSKIE_FACE_RECOGNITION")
+
+
 def get_api_key(x_api_key: str = Header(...)):
     # Compare the provided key with the key from the .env file
     if x_api_key != API_KEY:
@@ -24,6 +19,8 @@ def get_api_key(x_api_key: str = Header(...)):
             detail="Unauthorized: Invalid or missing X-API-Key",
         )
     return x_api_key
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -35,7 +32,14 @@ async def say_hello(name: str):
 
 
 @app.post("/upload-image/")
-async def upload_image(api_key: str = Depends(get_api_key),image: UploadFile = File(...)):
+async def upload_image(api_key: str = Depends(get_api_key), image: UploadFile = File(...)):
+    import cv2
+    import dlib
+
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+    recognizer = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
+
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_file_path = os.path.join(os.getcwd(), image.filename)
         with open(temp_file_path, "wb") as buffer:
@@ -62,6 +66,8 @@ async def upload_image(api_key: str = Depends(get_api_key),image: UploadFile = F
         "faces": data
     })
 
+
 if __name__ == '__main__':
     import uvicorn
+
     uvicorn.run(app)
