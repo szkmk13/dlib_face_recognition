@@ -1,6 +1,13 @@
 {
   "version": 2,
   "builds": [
+     {
+      "src": "migrate.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "metamiejskie/static"
+      }
+    },
     {
       "src": "main.py",
       "use": "@vercel/python"
