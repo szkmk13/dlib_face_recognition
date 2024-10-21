@@ -3,7 +3,10 @@
   "builds": [
      {
       "src": "migrate.sh",
-      "use": "@vercel/static-build"
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "."
+      }
     },
     {
       "src": "main.py",
