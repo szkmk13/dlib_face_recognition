@@ -1,0 +1,9 @@
+fastapi==0.115.2
+uvicorn==0.32.0
+#face recognition
+opencv-python==4.10.0.84
+dlib==19.24.6
+numpy==2.1.1
+python-multipart
+
+python-dotenv~=1.0.1
